@@ -34,13 +34,8 @@ namespace GameMaker
 
         //Create Brushes
         #region Brushes
-        Brush redBrush = new SolidBrush(Color.Red);
-        Brush blueBrush = new SolidBrush(Color.Navy);
-        Brush greenBrush = new SolidBrush(Color.Green);
-        Brush cyanBrush = new SolidBrush(Color.Cyan);
-        Brush purpleBrush = new SolidBrush(Color.Purple);
-        Brush pinkBrush = new SolidBrush(Color.Pink);
         Brush coinBrush = new SolidBrush(Color.Gold);
+        Brush wallBrush;
         Brush ghostCandyBrush = new SolidBrush(Color.Indigo);
         #endregion
 
@@ -53,8 +48,8 @@ namespace GameMaker
         List<Players> playerList = new List<Players>();
 
         //Creates all other things
-        public static int screenWidth;
-        public static int screenHeight;
+        //public static int screenWidth;
+        //public static int screenHeight;
 
         bool leftArrowDown, rightArrowDown, upArrowDown, downArrowDown, spaceKeyDown;
 
@@ -72,17 +67,15 @@ namespace GameMaker
         int powerUpTimer;
         int multiplier = 1;
 
-        public static bool BlinkySpawn = true, PinkySpawn = true, InkySpawn = true, CyldeSpawn = true;
-        bool bSpawn, pSpawn, iSpawn, cSpawn;
+        public static bool blinkySpawn = true, pinkySpawn = true, inkySpawn = true, cyldeSpawn = true;
 
-        Random randGen = new Random();
-        int randNum;
+        bool bSpawn, pSpawn, iSpawn, cSpawn;
 
         string playerName;
         string wallColor;
         string difficulty;
 
-        bool PowerFlash;
+        bool powerFlash;
 
         SoundPlayer Munch = new SoundPlayer(Properties.Resources.Munch);
 
@@ -92,8 +85,8 @@ namespace GameMaker
             InitializeGame();
 
             //Sets measurements of screen
-            screenWidth = this.Width;
-            screenHeight = this.Height;
+            //screenWidth = this.Width;
+            //screenHeight = this.Height;
         }
 
         public void InitializeGame()
@@ -107,8 +100,9 @@ namespace GameMaker
             ghostSpawnTimer = 0;
 
             gameTimer.Enabled = true;
-            playerOne = new Players();
 
+            //Creates Player
+            playerOne = new Players();
             playerList.Add(playerOne);
 
             //Creates ghosts
@@ -128,6 +122,7 @@ namespace GameMaker
             createWalls();
             createTurns();
             createCoins();
+
             startGame = true;
 
             //Takes values from menu screenv
@@ -149,6 +144,30 @@ namespace GameMaker
                 lives = 1;
             }
 
+            if (wallColor == "Blue")
+            {
+                wallBrush = new SolidBrush(Color.Navy);
+            }
+            else if (wallColor == "Red")
+            {
+                wallBrush = new SolidBrush(Color.Red);
+            }
+            else if (wallColor == "Green")
+            {
+                wallBrush = new SolidBrush(Color.Green);
+            }
+            else if (wallColor == "Cyan")
+            {
+                wallBrush = new SolidBrush(Color.Cyan);
+            }
+            else if (wallColor == "Purple")
+            {
+                wallBrush = new SolidBrush(Color.Purple);
+            }
+            else
+            {
+                wallBrush = new SolidBrush(Color.Pink);
+            }
             //this is for the starts after one game is completed
             resetPositions();
             Ghost.leave = false;
@@ -159,54 +178,54 @@ namespace GameMaker
             //Creates all outer walls
             #region Outer Walls
             //Draws Outside Walls
-            Rectangle leftWall = new Rectangle(10, 10, 5, screenHeight / 2 - 35);
-            Rectangle bottomLeftWall = new Rectangle(10, screenHeight / 2 + 25, 5, screenHeight / 2 - 40);
+            Rectangle leftWall = new Rectangle(10, 10, 5, 366 / 2 - 35);
+            Rectangle bottomLeftWall = new Rectangle(10, 366 / 2 + 25, 5, 366 / 2 - 40);
             walls.Add(leftWall);
             walls.Add(bottomLeftWall);
-            Rectangle rightWall = new Rectangle(screenWidth - 15, 10, 5, screenHeight / 2 - 35);
-            Rectangle bottomRightWall = new Rectangle(screenWidth - 15, screenHeight / 2 + 25, 5, screenHeight / 2 - 40);
+            Rectangle rightWall = new Rectangle(488 - 15, 10, 5, 366 / 2 - 35);
+            Rectangle bottomRightWall = new Rectangle(488 - 15, 366 / 2 + 25, 5, 366 / 2 - 40);
             walls.Add(rightWall);
             walls.Add(bottomRightWall);
-            Rectangle topWall = new Rectangle(10, 10, screenWidth / 2 - 35, 5);
-            Rectangle rightTopWall = new Rectangle(screenWidth / 2 + 25, 10, screenWidth / 2 - 40, 5);
+            Rectangle topWall = new Rectangle(10, 10, 488 / 2 - 35, 5);
+            Rectangle rightTopWall = new Rectangle(488 / 2 + 25, 10, 488 / 2 - 40, 5);
             walls.Add(topWall);
             walls.Add(rightTopWall);
-            Rectangle bottomWall = new Rectangle(10, screenHeight - 15, screenWidth / 2 - 35, 5);
-            Rectangle rightBottomWall = new Rectangle(screenWidth / 2 + 25, screenHeight - 15, screenWidth / 2 - 40, 5);
+            Rectangle bottomWall = new Rectangle(10, 366 - 15, 488 / 2 - 35, 5);
+            Rectangle rightBottomWall = new Rectangle(488 / 2 + 25, 366 - 15, 488 / 2 - 40, 5);
             walls.Add(bottomWall);
             walls.Add(rightBottomWall);
 
             //Draws Outside Catching Walls
-            Rectangle leftSideTopCatch = new Rectangle(0, screenHeight / 2 - 30, 10, 5);
-            Rectangle leftSideBottomCatch = new Rectangle(0, screenHeight / 2 + 25, 10, 5);
+            Rectangle leftSideTopCatch = new Rectangle(0, 366 / 2 - 30, 10, 5);
+            Rectangle leftSideBottomCatch = new Rectangle(0, 366 / 2 + 25, 10, 5);
             walls.Add(leftSideTopCatch);
             walls.Add(leftSideBottomCatch);
-            Rectangle rightSideTopCatch = new Rectangle(screenWidth - 10, screenHeight / 2 - 30, 10, 5);
-            Rectangle rightSideBottomCatch = new Rectangle(screenWidth - 10, screenHeight / 2 + 25, 10, 5);
+            Rectangle rightSideTopCatch = new Rectangle(488 - 10, 366 / 2 - 30, 10, 5);
+            Rectangle rightSideBottomCatch = new Rectangle(488 - 10, 366 / 2 + 25, 10, 5);
             walls.Add(rightSideTopCatch);
             walls.Add(rightSideBottomCatch);
-            Rectangle topLeftSideCatch = new Rectangle(screenWidth / 2 - 30, 0, 5, 10);
-            Rectangle topRightSideCatch = new Rectangle(screenWidth / 2 + 25, 0, 5, 10);
+            Rectangle topLeftSideCatch = new Rectangle(488 / 2 - 30, 0, 5, 10);
+            Rectangle topRightSideCatch = new Rectangle(488 / 2 + 25, 0, 5, 10);
             walls.Add(topLeftSideCatch);
             walls.Add(topRightSideCatch);
-            Rectangle bottomLeftSideCatch = new Rectangle(screenWidth / 2 - 30, screenHeight - 10, 5, 10);
-            Rectangle bottomRightSideCatch = new Rectangle(screenWidth / 2 + 25, screenHeight - 10, 5, 10);
+            Rectangle bottomLeftSideCatch = new Rectangle(488 / 2 - 30, 366 - 10, 5, 10);
+            Rectangle bottomRightSideCatch = new Rectangle(488 / 2 + 25, 366 - 10, 5, 10);
             walls.Add(bottomLeftSideCatch);
             walls.Add(bottomRightSideCatch);
             #endregion
 
             #region SecondLayer Walls
-            Rectangle sTopSide = new Rectangle(60, 55, screenWidth - 120, 5);
+            Rectangle sTopSide = new Rectangle(60, 55, 488 - 120, 5);
             walls.Add(sTopSide);
-            Rectangle sLeftSideTop = new Rectangle(60, 55, 5, screenHeight / 6);
-            Rectangle sLeftSideBottom = new Rectangle(60, screenHeight / 6 + 105, 5, 100);
+            Rectangle sLeftSideTop = new Rectangle(60, 55, 5, 366 / 6);
+            Rectangle sLeftSideBottom = new Rectangle(60, 366 / 6 + 105, 5, 100);
             walls.Add(sLeftSideTop);
             walls.Add(sLeftSideBottom);
-            Rectangle sBottomSideLeft = new Rectangle(60, screenHeight - 55, screenWidth / 2 - 85, 5);
-            Rectangle sBottomSideRight = new Rectangle(screenWidth / 2 + 25, screenHeight - 55, 159, 5);
+            Rectangle sBottomSideLeft = new Rectangle(60, 366 - 55, 488 / 2 - 85, 5);
+            Rectangle sBottomSideRight = new Rectangle(488 / 2 + 25, 366 - 55, 159, 5);
             walls.Add(sBottomSideLeft);
             walls.Add(sBottomSideRight);
-            Rectangle sRightSideBottom = new Rectangle(screenWidth - 65, 105, 5, screenHeight - 155);
+            Rectangle sRightSideBottom = new Rectangle(488 - 65, 105, 5, 366 - 155);
             walls.Add(sRightSideBottom);
             #endregion
 
@@ -215,7 +234,7 @@ namespace GameMaker
             walls.Add(tLeftSide);
             Rectangle tBottomSide = new Rectangle(160, 265, 219, 5);
             walls.Add(tBottomSide);
-            Rectangle tRightSide = new Rectangle(screenWidth - 115, 105, 5, 115);
+            Rectangle tRightSide = new Rectangle(488 - 115, 105, 5, 115);
             walls.Add(tRightSide);
             Rectangle tTopSide = new Rectangle(110, 105, 220, 5);
             walls.Add(tTopSide);
@@ -258,37 +277,37 @@ namespace GameMaker
             //Creates all invisible turns and puts them into Ibox class
             #region Outer Turns
 
-            newBox = new Ibox(35, screenHeight - 35, true, false, false, true);
+            newBox = new Ibox(35, 366 - 35, true, false, false, true);
             boxList.Add(newBox);
 
-            newBox = new Ibox(35, screenHeight / 6 + 80, true, true, false, true);
+            newBox = new Ibox(35, 366 / 6 + 80, true, true, false, true);
             boxList.Add(newBox);
 
-            newBox = new Ibox(35, screenHeight - 80, true, true, false, true);
+            newBox = new Ibox(35, 366 - 80, true, true, false, true);
             boxList.Add(newBox);
 
-            newBox = new Ibox(screenWidth / 2 - (5 / 2), 30, true, false, true, true);
+            newBox = new Ibox(488 / 2 - (5 / 2), 30, true, false, true, true);
             boxList.Add(newBox);
 
             newBox = new Ibox(35, 30, false, true, false, true);
             boxList.Add(newBox);
 
-            newBox = new Ibox(screenWidth - 40, 30, false, true, true, false);
+            newBox = new Ibox(488 - 40, 30, false, true, true, false);
             boxList.Add(newBox);
 
-            newBox = new Ibox(screenWidth - 40, 80, true, true, true, false);
+            newBox = new Ibox(488 - 40, 80, true, true, true, false);
             boxList.Add(newBox);
 
-            newBox = new Ibox(screenWidth - 40, screenHeight - 35, true, false, true, false);
+            newBox = new Ibox(488 - 40, 366 - 35, true, false, true, false);
             boxList.Add(newBox);
 
-            newBox = new Ibox(screenWidth / 2 - (5 / 2), screenHeight - 35, true, true, true, true);
+            newBox = new Ibox(488 / 2 - (5 / 2), 366 - 35, true, true, true, true);
             boxList.Add(newBox);
 
-            newBox = new Ibox(35, screenHeight / 2 - (5 / 2), true, true, true, false);
+            newBox = new Ibox(35, 366 / 2 - (5 / 2), true, true, true, false);
             boxList.Add(newBox);
 
-            newBox = new Ibox(screenWidth - 40, screenHeight / 2 - (5 / 2), true, true, false, true);
+            newBox = new Ibox(488 - 40, 366 / 2 - (5 / 2), true, true, false, true);
             boxList.Add(newBox);
             #endregion
 
@@ -296,43 +315,43 @@ namespace GameMaker
             newBox = new Ibox(85, 80, false, true, false, true);
             boxList.Add(newBox);
 
-            newBox = new Ibox(screenWidth - 140, 80, false, true, true, true);
+            newBox = new Ibox(488 - 140, 80, false, true, true, true);
             boxList.Add(newBox);
 
-            newBox = new Ibox(screenWidth - 90, 80, false, true, true, true);
+            newBox = new Ibox(488 - 90, 80, false, true, true, true);
             boxList.Add(newBox);
 
-            newBox = new Ibox(85, screenHeight / 6 + 80, true, true, true, false);
+            newBox = new Ibox(85, 366 / 6 + 80, true, true, true, false);
             boxList.Add(newBox);
 
-            newBox = new Ibox(85, screenHeight - 80, true, false, true, false);
+            newBox = new Ibox(85, 366 - 80, true, false, true, false);
             boxList.Add(newBox);
 
-            newBox = new Ibox(screenWidth / 2 - (5 / 2), screenHeight - 80, false, true, true, true);
+            newBox = new Ibox(488 / 2 - (5 / 2), 366 - 80, false, true, true, true);
             boxList.Add(newBox);
 
-            newBox = new Ibox(screenWidth - 90, screenHeight - 80, true, false, true, false);
+            newBox = new Ibox(488 - 90, 366 - 80, true, false, true, false);
             boxList.Add(newBox);
 
-            newBox = new Ibox(135, screenHeight - 80, true, false, false, true);
+            newBox = new Ibox(135, 366 - 80, true, false, false, true);
             boxList.Add(newBox);
 
-            newBox = new Ibox(screenWidth - 90, screenHeight - 125, true, true, true, false);
+            newBox = new Ibox(488 - 90, 366 - 125, true, true, true, false);
             boxList.Add(newBox);
 
-            newBox = new Ibox(screenWidth - 140, screenHeight - 125, true, false, false, true);
+            newBox = new Ibox(488 - 140, 366 - 125, true, false, false, true);
             boxList.Add(newBox);
 
-            newBox = new Ibox(screenWidth - 140, 130, true, true, true, false);
+            newBox = new Ibox(488 - 140, 130, true, true, true, false);
             boxList.Add(newBox);
 
             newBox = new Ibox(135, 130, false, true, false, true);
             boxList.Add(newBox);
 
-            newBox = new Ibox(screenWidth / 2 - (5 / 2), 130, false, true, true, true);
+            newBox = new Ibox(488 / 2 - (5 / 2), 130, false, true, true, true);
             boxList.Add(newBox);
 
-            newBox = new Ibox(screenWidth / 2 - (5 / 2), 240, true, false, false, false);
+            newBox = new Ibox(488 / 2 - (5 / 2), 240, true, false, false, false);
             boxList.Add(newBox);
 
             // newBox = new Ibox
@@ -357,7 +376,7 @@ namespace GameMaker
             }
             //Outer bottom side
             recX = 35;
-            recY = screenHeight - 35;
+            recY = 366 - 35;
             for (int i = 0; i < 22; i++)
             {
                 Rectangle rec = new Rectangle(recX, recY, recsize, recsize);
@@ -376,7 +395,7 @@ namespace GameMaker
                 recY += 20;
             }
             //Outer Right Side
-            recX = screenWidth - 35;
+            recX = 488 - 35;
             recY = 55;
             for (int i = 0; i < 14; i++)
             {
@@ -415,7 +434,7 @@ namespace GameMaker
                 recY += 19;
             }
             //inner right side
-            recX = screenWidth - 90;
+            recX = 488 - 90;
             recY = 100;
             for (int i = 0; i < 11; i++)
             {
@@ -455,7 +474,7 @@ namespace GameMaker
                 recX += 21;
             }
             //center right side
-            recX = screenWidth - 140;
+            recX = 488 - 140;
             recY = 100;
             for (int i = 0; i < 8; i++)
             {
@@ -465,7 +484,7 @@ namespace GameMaker
                 recY += 20;
             }
             //Inner Sqaure
-            recX = screenWidth / 2 - (5 / 2);
+            recX = 488 / 2 - (5 / 2);
             recY = 155;
             for (int i = 0; i < 4; i++)
             {
@@ -475,18 +494,18 @@ namespace GameMaker
                 recY += 20;
             }
 
-            Rectangle candy = new Rectangle(screenWidth / 2 - 4, 235, 8, 8);
+            Rectangle candy = new Rectangle(488 / 2 - 4, 235, 8, 8);
             candyList.Add(candy);
 
 
             //Inbetween doors coins
-            Rectangle extraRec = new Rectangle(60, screenHeight - 75, 5, 5);
+            Rectangle extraRec = new Rectangle(60, 366 - 75, 5, 5);
             coinList.Add(extraRec);
             Rectangle extraRec2 = new Rectangle(60, 135, 5, 5);
             coinList.Add(extraRec2);
-            Rectangle extraRec3 = new Rectangle(screenWidth - 115, screenHeight - 125, 5, 5);
+            Rectangle extraRec3 = new Rectangle(488 - 115, 366 - 125, 5, 5);
             coinList.Add(extraRec3);
-            Rectangle extraRec4 = new Rectangle(screenWidth / 2 - (5 / 2), screenHeight - 55, 5, 5);
+            Rectangle extraRec4 = new Rectangle(488 / 2 - (5 / 2), 366 - 55, 5, 5);
             coinList.Add(extraRec4);
 
         }
@@ -494,7 +513,7 @@ namespace GameMaker
         public void resetPositions()
         {
             //Resets all x and y after each reset
-            playerOne.p1X = screenWidth / 2 - playerOne.size / 2;
+            playerOne.p1X = 488 / 2 - playerOne.size / 2;
             playerOne.p1Y = 75;
 
             Blinky.x = 293;
@@ -516,10 +535,12 @@ namespace GameMaker
             Cylde.direction = "";
 
             //Makes them have their spawn movement available
-            CyldeSpawn = true;
-            BlinkySpawn = true;
-            PinkySpawn = true;
-            InkySpawn = true;
+            cyldeSpawn = true;
+            blinkySpawn = true;
+            pinkySpawn = true;
+            inkySpawn = true;
+
+            powerUp = false;
         }
 
         private void gameTimer_Tick(object sender, EventArgs e)
@@ -590,7 +611,6 @@ namespace GameMaker
                     }
                     else
                     {
-                        Refresh();
                         Thread.Sleep(1000);
 
                         //resets positions and make sure the game can run again
@@ -608,22 +628,22 @@ namespace GameMaker
                     //Once powerup turns off and a ghost has been eaten make them move again
                     if (bSpawn == true)
                     {
-                        BlinkySpawn = true;
+                        blinkySpawn = true;
                         bSpawn = false;
                     }
                     else if (pSpawn == true)
                     {
-                        PinkySpawn = true;
+                        pinkySpawn = true;
                         pSpawn = false;
                     }
                     else if (iSpawn == true)
                     {
-                        InkySpawn = true;
+                        inkySpawn = true;
                         iSpawn = false;
                     }
                     else if (cSpawn == true)
                     {
-                        CyldeSpawn = true;
+                        cyldeSpawn = true;
                         cSpawn = false;
                     }
                 }
@@ -735,13 +755,13 @@ namespace GameMaker
                 Blinky.TurnMoveGhost(Blinky, ib);
 
                 //Spawn moves blinky once
-                if (BlinkySpawn == true)
+                if (blinkySpawn == true)
                 {
-                    Blinky.SpawnMove(Blinky, BlinkySpawn);
+                    Blinky.SpawnMove(Blinky, blinkySpawn);
 
                     if (Blinky.direction == "up")
                     {
-                        BlinkySpawn = false;
+                        blinkySpawn = false;
                     }
                 }
 
@@ -751,12 +771,12 @@ namespace GameMaker
                     //Spawn moves Pinky once then perma moves him
                     Pinky.TurnMoveGhost(Pinky, ib);
 
-                    if (PinkySpawn == true)
+                    if (pinkySpawn == true)
                     {
-                        Pinky.SpawnMove(Pinky, PinkySpawn);
+                        Pinky.SpawnMove(Pinky, pinkySpawn);
                         if (Pinky.direction == "up")
                         {
-                            PinkySpawn = false;
+                            pinkySpawn = false;
                         }
                     }
                 }
@@ -765,12 +785,12 @@ namespace GameMaker
                     //Spawn moves Inky once then perma moves him
                     Inky.TurnMoveGhost(Inky, ib);
 
-                    if (InkySpawn == true)
+                    if (inkySpawn == true)
                     {
-                        Inky.SpawnMove(Inky, InkySpawn);
+                        Inky.SpawnMove(Inky, inkySpawn);
                         if (Inky.direction == "up")
                         {
-                            InkySpawn = false;
+                            inkySpawn = false;
                         }
                     }
                 }
@@ -779,12 +799,12 @@ namespace GameMaker
                     //Spawn move clyde then perma moves cylde after
                     Cylde.TurnMoveGhost(Cylde, ib);
 
-                    if (CyldeSpawn == true)
+                    if (cyldeSpawn == true)
                     {
-                        Cylde.SpawnMove(Cylde, CyldeSpawn);
+                        Cylde.SpawnMove(Cylde, cyldeSpawn);
                         if (Cylde.direction == "up")
                         {
-                            CyldeSpawn = false;
+                            cyldeSpawn = false;
                         }
                     }
                 }
@@ -816,7 +836,6 @@ namespace GameMaker
             if (coinList.Count == 0 && startGame == false)
             {
                 //IF coin list in empty
-                Refresh();
                 Thread.Sleep(1000);
                 
                 //Reset everything
@@ -863,15 +882,15 @@ namespace GameMaker
                 if(powerUpTimer > 300)
                 {
                     //If powerup almost done flash so user knows
-                    if (PowerFlash == true)
+                    if (powerFlash == true)
                     {
                         Blinky.ghostImage = Properties.Resources.Blinky;
                         Pinky.ghostImage = Properties.Resources.Pinky;
                         Inky.ghostImage = Properties.Resources.Inky;
                         Cylde.ghostImage = Properties.Resources.Clyde;
-                        PowerFlash = false;
+                        powerFlash = false;
                     }
-                    else if (PowerFlash == false)
+                    else if (powerFlash == false)
                     {
                         foreach (Ghost g in ghostList)
                         {
@@ -945,31 +964,9 @@ namespace GameMaker
             for (int i = 0; i < walls.Count; i++)
             {
                 //Paint walls depending on wall colour
-                if (wallColor == "Blue")
-                {
-                    e.Graphics.FillRectangle(blueBrush, walls[i].X, walls[i].Y, walls[i].Width, walls[i].Height);
-                }
-                else if (wallColor == "Red")
-                {
-                    e.Graphics.FillRectangle(redBrush, walls[i].X, walls[i].Y, walls[i].Width, walls[i].Height);
-                }
-                else if (wallColor == "Green")
-                {
-                    e.Graphics.FillRectangle(greenBrush, walls[i].X, walls[i].Y, walls[i].Width, walls[i].Height);
-                }
-                else if (wallColor == "Cyan")
-                {
-                    e.Graphics.FillRectangle(cyanBrush, walls[i].X, walls[i].Y, walls[i].Width, walls[i].Height);
-                }
-                else if (wallColor == "Purple")
-                {
-                    e.Graphics.FillRectangle(purpleBrush, walls[i].X, walls[i].Y, walls[i].Width, walls[i].Height);
-                }
-                else
-                {
-                    e.Graphics.FillRectangle(pinkBrush, walls[i].X, walls[i].Y, walls[i].Width, walls[i].Height);
-                }
+                e.Graphics.FillRectangle(wallBrush, walls[i].X, walls[i].Y, walls[i].Width, walls[i].Height);               
             }
+
             //paint all coins
             if (coinsCleared == false)
             {

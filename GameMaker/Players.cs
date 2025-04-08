@@ -22,7 +22,7 @@ namespace GameMaker
 
         public Players()
         {
-            p1X = GameScreen.screenWidth / 2 - (size / 2);
+            p1X =/* GameScreen.screenWidth*/ 488 / 2 - (size / 2);
             p1Y = 75;
         }
 
@@ -103,17 +103,17 @@ namespace GameMaker
             //if goes through the side put it on other side 
             if (p1X < -20)
             {
-                p1X = GameScreen.screenWidth + 15;
+                p1X =/* GameScreen.*//*screenWidth*/488 + 15;
             }
             else if (p1Y < -20)
             {
-                p1Y = GameScreen.screenHeight + 15;
+                p1Y =/* GameScreen.screenHeight*/366 + 15;
             }
-            else if (p1Y > GameScreen.screenHeight + 20)
+            else if (p1Y > /*GameScreen.screenHeight*/366 + 20)
             {
                 p1Y = -15;
             }
-            else if (p1X > GameScreen.screenWidth + 20)
+            else if (p1X > /*GameScreen.screenWidth*/488 + 20)
             {
                 p1X = -15;
             }

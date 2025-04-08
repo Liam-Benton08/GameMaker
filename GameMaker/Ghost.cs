@@ -18,7 +18,7 @@ namespace GameMaker
         public int innerSize = 5;
 
         public string direction;
-        public int TurnTimer;
+        public int turnTimer;
 
         Random randGen = new Random();
         int randNum;
@@ -28,13 +28,6 @@ namespace GameMaker
         public Rectangle ghostRec;
         public Image ghostImage;
         public string name;
-
-
-        //public Image ClydeImage = Properties.Resources.Clyde;
-        //public Image BlinkyImage = Properties.Resources.Blinky;
-        //public Image PinkyImage = Properties.Resources.Pinky;
-        //public Image InkyImage = Properties.Resources.Inky;
-        //public Image VGhostImage = Properties.Resources.Vunerable_Ghost;
 
         public Ghost(int _x, int _y, Image _image, string _name) 
         {
@@ -60,7 +53,7 @@ namespace GameMaker
         {
                 if (g.CanTurn(ib))
                 {
-                    if (g.TurnTimer > 100)
+                    if (g.turnTimer > 100)
                     {
                         randNum = randGen.Next(1, 5);
 
@@ -70,7 +63,7 @@ namespace GameMaker
                             {
                                 g.x = ib.x - (g.size / 3);
                                 g.direction = "up";
-                                g.TurnTimer = 0;
+                                g.turnTimer = 0;
                             }
                             else
                             {
@@ -84,7 +77,7 @@ namespace GameMaker
                             {
                                 g.x = ib.x - (g.size / 3);
                                 g.direction = "down";
-                                g.TurnTimer = 0;
+                                g.turnTimer = 0;
                             }
                             else
                             {
@@ -98,7 +91,7 @@ namespace GameMaker
                             {
                                 g.y = ib.y - (g.size / 3);
                                 g.direction = "left";
-                                g.TurnTimer = 0;
+                                g.turnTimer = 0;
                             }
                             else
                             {
@@ -112,7 +105,7 @@ namespace GameMaker
                             {
                                 g.y = ib.y - (g.size / 3);
                                 g.direction = "right";
-                                g.TurnTimer = 0;
+                                g.turnTimer = 0;
                             }
                             else
                             {
@@ -123,7 +116,7 @@ namespace GameMaker
                     }
                 }
 
-                g.TurnTimer++;
+                g.turnTimer++;
             
         }
 
@@ -149,17 +142,17 @@ namespace GameMaker
             //if goes through the side put it on other side 
             if (x < -20)
             {
-                x = GameScreen.screenWidth + 15;
+                x = 488 + 15;
             }
             else if (y < -20)
             {
-                y = GameScreen.screenHeight + 15;
+                y = 366 + 15;
             }
-            else if (y > GameScreen.screenHeight + 20)
+            else if (y > 366 + 20)
             {
                 y = -15;
             }
-            else if (x > GameScreen.screenWidth + 20)
+            else if (x > 488 + 20)
             {
                 x = -15;
             }
@@ -171,7 +164,7 @@ namespace GameMaker
             {
                 if (leave == false)
                 {
-                    if (g.x < GameScreen.screenWidth / 2)
+                    if (g.x </* GameScreen.screenWidth*/ 488 / 2)
                     {
                         g.direction = "right";
                     }
@@ -182,7 +175,7 @@ namespace GameMaker
                     leave = true;
                 }
 
-                if (g.x == GameScreen.screenWidth / 2 - g.size / 2)
+                if (g.x == /*GameScreen.screenWidth*/488 / 2 - g.size / 2)
                 {
                     g.direction = "up";
                     leave = false;
